@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Manicure Studio - Galería</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" class="splash">
+    <div class="splash-content">
+        <img src="img/galeria/logodina.jpeg" class="splash-logo" alt="Logo">
+        <h1 class="splash-title">Bienvenida ✨</h1>
+    </div>
+</div>
+
+<header class="main-header fade-in">
+    <div class="logo">
+        <img src="img/galeria/logodina.jpeg" alt="Manicure Studio">
+    </div>
+
+    <div class="hamburger" id="hamburger">☰</div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="quienes-somos.html">Quiénes somos</a></li>
+            <li><a href="galeria.html" class="active">Galería</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+<section class="galeria reveal">
+    <h1>Galería de trabajos</h1>
+
+    <div class="grid-galeria">
+        <img src="img/galeria/maniquire (1).jpeg" alt="">
+        <img src="img/galeria/maniquire (2).jpeg" alt="">
+        <img src="img/galeria/maniquire (3).jpeg" alt="">
+        <img src="img/galeria/maniquire (4).jpeg" alt="">
+        <img src="img/galeria/maniquire (5).jpeg" alt="">
+        <img src="img/galeria/maniquire (6).jpeg" alt="">
+        <img src="img/galeria/maniquire (7).jpeg" alt="">
+        <img src="img/galeria/maniquire (8).jpeg" alt="">
+        <img src="img/galeria/maniquire (9).jpeg" alt="">
+        <img src="img/galeria/maniquire (10).jpeg" alt="">
+        <img src="img/galeria/maniquire (11).jpeg" alt="">
+        <img src="img/galeria/maniquire (13).jpeg" alt="">
+        <img src="img/galeria/maniquire (14).jpeg" alt="">
+        <img src="img/galeria/maniquire (15).jpeg" alt="">
+        <img src="img/galeria/maniquire (16).jpeg" alt="">
+        <img src="img/galeria/maniquire (17).jpeg" alt="">
+        <img src="img/galeria/maniquire (18).jpeg" alt="">
+        <img src="img/galeria/maniquire (19).jpeg" alt="">
+        <img src="img/galeria/maniquire (20).jpeg" alt="">
+        <img src="img/galeria/maniquire (21).jpeg" alt="">
+        <img src="img/galeria/maniquire (22).jpeg" alt="">
+        <img src="img/galeria/maniquire (23).jpeg" alt="">
+        <img src="img/galeria/maniquire (24).jpeg" alt="">
+        <img src="img/galeria/maniquire (25).jpeg" alt="">
+        <img src="img/galeria/maniquire (26).jpeg" alt="">
+        <img src="img/galeria/maniquire (27).jpeg" alt="">
+        <img src="img/galeria/maniquire (28).jpeg" alt="">
+        <img src="img/galeria/maniquire (29).jpeg" alt="">
+    </div>
+</section>
+
+</main>
+
+<a href="https://wa.me/50489118194" class="whatsapp-btn" target="_blank">💬</a>
+
+<footer class="main-footer fade-in">
+    <p>&copy; 2026 Manicure Studio. Todos los derechos reservados.</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+    <span class="close-btn">&times;</span>
+    <span class="prev-btn">&#10094;</span>
+    <img id="lightbox-img" src="">
+    <span class="next-btn">&#10095;</span>
+</div>
+
+<script src="js/script.js"></script>
+
+<!-- JS ESPECÍFICO DEL LIGHTBOX -->
+<script>
+    const images = document.querySelectorAll(".grid-galeria img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const closeBtn = document.querySelector(".close-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    const prevBtn = document.querySelector(".prev-btn");
+
+    let currentIndex = 0;
+
+    images.forEach((img, index) => {
+        img.addEventListener("click", () => {
+            currentIndex = index;
+            showImage();
+            lightbox.style.display = "flex";
+        });
+    });
+
+    function showImage() {
+        lightboxImg.src = images[currentIndex].src;
+        scale = 1;
+        imgX = 0;
+        imgY = 0;
+        lightboxImg.style.transform = "scale(1)";
+    }
+
+    closeBtn.addEventListener("click", () => {
+        lightbox.style.display = "none";
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage();
+    });
+
+    prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage();
+    });
+
+    lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+            lightbox.style.display = "none";
+        }
+    });
+
+    // ZOOM + DRAG + PINCH
+    let scale = 1;
+    let isDragging = false;
+    let startX, startY;
+    let imgX = 0, imgY = 0;
+
+    lightboxImg.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const zoomSpeed = 0.1;
+
+        if (e.deltaY < 0) {
+            scale += zoomSpeed;
+        } else {
+            scale = Math.max(1, scale - zoomSpeed);
+        }
+
+        lightboxImg.style.transform = `scale(${scale}) translate(${imgX}px, ${imgY}px)`;
+    });
+
+    lightboxImg.addEventListener("mousedown", (e) => {
+        if (scale <= 1) return;
+        isDragging = true;
+        startX = e.clientX - imgX;
+        startY = e.clientY - imgY;
+    });
+
+    lightboxImg.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        imgX = e.clientX - startX;
+        imgY = e.clientY - startY;
+        lightboxImg.style.transform = `scale(${scale}) translate(${imgX}px, ${imgY}px)`;
+    });
+
+    lightboxImg.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+
+    lightboxImg.addEventListener("mouseleave", () => {
+        isDragging = false;
+    });
+
+    let initialDistance = 0;
+
+    lightboxImg.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            initialDistance = Math.sqrt(dx * dx + dy * dy);
+        }
+    });
+
+    lightboxImg.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const newDistance = Math.sqrt(dx * dx + dy * dy);
+
+            const zoomFactor = newDistance / initialDistance;
+            scale = Math.min(Math.max(1, zoomFactor), 4);
+
+            lightboxImg.style.transform = `scale(${scale}) translate(${imgX}px, ${imgY}px)`;
+        }
+    });
+</script>
+
+</body>
+</html>
